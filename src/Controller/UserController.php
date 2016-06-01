@@ -6,19 +6,27 @@
 
 namespace Controller;
 
+use Silex\Application;
 
 class UserController {
 
-    public function getAll() {
-        return 'GetAll';
+    public function getAll(Application $app) {
+        $sql = "SELECT * FROM users";
+        $users = $app['db']->fetchAssoc($sql);
+        return $app->json($users);
     }
 
-    public function get($id){
-        return "get $id";
+    public function get(Application $app, $id){
+        $sql = "SELECT * FROM users WHERE id = ?";
+        $user = $app['db']->fetchAssoc($sql, [(int) $id]);
+        return $app->json($user);
     }
 
-    public function create() {
-        return 'create';
+    public function create(Application $app) {
+        /** @var \Symfony\Component\HttpFoundation\Request $request */
+        $request = $app['request'];
+        // $sql = "INSERT INTO users VALUES ()";
+        return $app->json($request->request->all());
     }
 
     public function update($id){
